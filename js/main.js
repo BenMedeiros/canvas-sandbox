@@ -12,6 +12,7 @@ import {
 import * as reduceColorBit from "../app/imageManipulation/reduceColorBit.js";
 import {LabelInputType} from "./LabelInputType.js";
 import {trackFileUpload} from "../app/src/fileHandler.js";
+import {RangeSliderType} from "./RangeSliderType.js";
 
 console.log('main.js loaded');
 
@@ -34,6 +35,7 @@ function createButton(fn, settingLabelInputs) {
 
 // save the element if it's been created to remove it when its not used
 let controlDetailsElement = null;
+let controlDetailsUpdateFn = null;
 
 function createControlDetailsSection(fn, labelInputs) {
 
@@ -44,19 +46,22 @@ function createControlDetailsSection(fn, labelInputs) {
   h3.innerText = fn.name;
   div.appendChild(h3);
 
-  for (const labelInput of labelInputs) {
-    labelInput.createElementIn(div);
-  }
-
-  const btnEl = document.createElement("button");
-  btnEl.innerText = 'Update';
-  btnEl.onclick = () => {
+  const updateFunction = () => {
     let fnBinded = fn;
     for (const labelInput of labelInputs) {
       fnBinded = fnBinded.bind(null, labelInput.getValue());
     }
     fnBinded();
   };
+
+  for (const labelInput of labelInputs) {
+    labelInput.createElementIn(div, updateFunction);
+  }
+
+  const btnEl = document.createElement("button");
+  btnEl.innerText = 'Update';
+  btnEl.onclick = updateFunction;
+  controlDetailsUpdateFn = btnEl.onclick;
   div.appendChild(btnEl);
 
   if (controlDetailsElement) controlDetailsElement.remove();
@@ -69,26 +74,40 @@ function createControls() {
   createButton(scaleCanvasTiny, [
     new LabelInputType('scale', 'number', 'Scale %', null, 10)
   ]);
+
   createButton(clearOutputCanvas);
+
   createButton(filterColor, [
     new LabelInputType('red', 'checkbox', 'Red', true),
     new LabelInputType('green', 'checkbox', 'Green', false),
     new LabelInputType('blue', 'checkbox', 'Blue', false),
 
   ]);
+
   createButton(blackAndWhite, [
     new LabelInputType('red', 'number', 'Red', 50),
     new LabelInputType('green', 'number', 'Green', 50),
     new LabelInputType('blue', 'number', 'Blue', 50),
-
   ]);
+
   createButton(pixelate, [
     new LabelInputType('pixelSize', 'number', 'Pixel Size', 10, 10),
     new LabelInputType('xOffset', 'number', 'X Offset', 0),
-    new LabelInputType('yOffset', 'number', 'Y Offset', 0 )
+    new LabelInputType('yOffset', 'number', 'Y Offset', 0)
   ]);
+
   createButton(productSmallPixelated, []);
 
+  const btnEl = createButton(blackAndWhite, [
+    new RangeSliderType('red', 0, 255, 50),
+    new RangeSliderType('green', 0, 255, 50),
+    new RangeSliderType('blue', 0, 255, 50),
+  ]);
+
+  // setInterval(() => {
+  //   console.log('try click', controlDetailsUpdateFn);
+  //   controlDetailsUpdateFn();
+  // }, 5000);
 
 }
 
