@@ -1,3 +1,6 @@
+import edgeDetector from "./edgeDetector.js";
+import grayscale from "./grayscale.js";
+
 export function scaleCanvasTiny(scale) {
   console.log('scaleCanvasTiny', scale);
   scale /= 100;
@@ -105,6 +108,19 @@ export function bindCanvas(canvas_, canvasOutput_) {
   ctxOutput = canvasOutput.getContext("2d");
 
 }
+
+export function edgeDetection(direction){
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  edgeDetector(imageData, direction);
+  ctxOutput.putImageData(imageData, 0, 0);
+}
+
+export function addGrayScale(){
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  grayscale(imageData);
+  ctxOutput.putImageData(imageData, 0, 0);
+}
+
 
 let canvas = null;
 let ctx = null;

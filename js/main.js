@@ -2,8 +2,8 @@
 
 import {
   blackAndWhite,
-  clearOutputCanvas,
-  filterColor,
+  clearOutputCanvas, edgeDetection,
+  filterColor, addGrayScale,
   pixelate,
   productSmallPixelated,
   scaleCanvasTiny
@@ -96,13 +96,20 @@ function createControls() {
     new LabelInputType('yOffset', 'number', 'Y Offset', 0)
   ]);
 
-  createButton(productSmallPixelated, []);
+  createButton(productSmallPixelated);
 
   const btnEl = createButton(blackAndWhite, [
     new RangeSliderType('red', 0, 255, 50),
     new RangeSliderType('green', 0, 255, 50),
     new RangeSliderType('blue', 0, 255, 50),
   ]);
+
+  createButton(addGrayScale);
+
+  createButton(edgeDetection, [
+    new LabelInputType('direction', 'string', 'Direction', 'right', 'right'),
+  ]);
+
 
   // setInterval(() => {
   //   console.log('try click', controlDetailsUpdateFn);

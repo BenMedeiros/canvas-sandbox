@@ -39,6 +39,8 @@ function loadServerImage(src){
 }
 
 function createCanvasAndOutputForImg(img) {
+  const scale = Math.min(img.width, )
+
   const canvas = document.createElement("canvas");
   canvas.width = img.width;
   canvas.height = img.height;
