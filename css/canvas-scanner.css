@@ -8,8 +8,8 @@ input {
 }
 
 canvas {
-  /*width: 29rem;*/
-  margin: .3rem;
+  width: 95%;
+  margin: 2%;
   border: solid black 1px;
 }
 

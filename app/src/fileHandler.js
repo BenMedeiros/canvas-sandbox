@@ -30,7 +30,7 @@ function loadLocalFileImage(file) {
   fr.readAsDataURL(file);
 }
 
-function loadServerImage(src){
+function loadServerImage(src) {
   const img = new Image();
   img.crossOrigin = "anonymous";
   img.src = src;
@@ -38,20 +38,22 @@ function loadServerImage(src){
   img.onload = () => createCanvasAndOutputForImg(img);
 }
 
-function createCanvasAndOutputForImg(img) {
-  const scale = Math.min(img.width, )
+function createCanvasAndOutputForImg(img, ) {
+  //scale so that the width < 2^10, don't think i care about height though
+  let scale = Math.pow(2, Math.ceil(Math.log2(img.width) - 10));
+  scale = Math.max(scale, 1);
 
   const canvas = document.createElement("canvas");
-  canvas.width = img.width;
-  canvas.height = img.height;
+  canvas.width = img.width / scale;
+  canvas.height = img.height / scale;
   const canvasOutput = document.createElement("canvas");
-  canvasOutput.width = img.width;
-  canvasOutput.height = img.height;
+  canvasOutput.width = img.width / scale;
+  canvasOutput.height = img.height / scale
   const div = document.createElement("div");
   div.appendChild(canvas);
   div.appendChild(canvasOutput);
 
-  canvas.getContext("2d").drawImage(img, 0, 0);
+  canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
 
   canvasesEl.appendChild(div);
   openCanvases.push({canvas, canvasOutput});
