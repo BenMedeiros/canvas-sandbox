@@ -109,9 +109,9 @@ export function bindCanvas(canvas_, canvasOutput_) {
 
 }
 
-export function edgeDetection(direction){
+export function edgeDetection(direction, edgeClampFactor){
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  edgeDetector(imageData, direction);
+  edgeDetector(imageData, direction, edgeClampFactor);
   ctxOutput.putImageData(imageData, 0, 0);
 }
 

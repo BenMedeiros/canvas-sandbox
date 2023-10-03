@@ -4,11 +4,12 @@ export class RangeSliderType {
   element = null;
   parentsElements = [];
 
-  constructor(name, min, max, value) {
+  constructor(name, min, max, value, step = 1) {
     this.name = name;
     this.min = min;
     this.max = max;
     this.value = value;
+    this.step = step;
     this.inputUpdateFnRunning = false;
   }
 
@@ -31,6 +32,7 @@ export class RangeSliderType {
     inputEl.min = this.min;
     inputEl.max = this.max;
     inputEl.value = this.value;
+    inputEl.step = this.step + '';
 
     divEl.appendChild(inputEl);
     this.element = inputEl;
@@ -44,9 +46,9 @@ export class RangeSliderType {
 
     inputEl.addEventListener("input", (event) => {
       inputTextEl.textContent = event.target.value;
-      if(this.inputUpdateFnRunning){
+      if (this.inputUpdateFnRunning) {
         console.log('update alrady running');
-      }else{
+      } else {
         this.inputUpdateFnRunning = true;
         inputUpdateFn();
         console.log('completed input update fn', this.getValue());

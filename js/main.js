@@ -108,6 +108,8 @@ function createControls() {
 
   createButton(edgeDetection, [
     new LabelInputType('direction', 'string', 'Direction', 'right', 'right'),
+    new RangeSliderType('edgeClampFactor', 1, 4, 4, .5),
+
   ]);
 
 
