@@ -40,7 +40,8 @@ function loadServerImage(src) {
 
 function createCanvasAndOutputForImg(img, ) {
   //scale so that the width < 2^10, don't think i care about height though
-  let scale = Math.pow(2, Math.ceil(Math.log2(img.width) - 10));
+  const maxResolutionPower = 9;
+  let scale = Math.pow(2, Math.ceil(Math.log2(img.width) - maxResolutionPower));
   scale = Math.max(scale, 1);
 
   const canvas = document.createElement("canvas");
@@ -70,5 +71,5 @@ function deleteCanvases() {
 const canvasesEl = document.getElementById("canvases");
 const openCanvases = []; //map of all canvas objects and outputs
 
-// loadServerImage('/img/004.png');
-loadServerImage('/img/costco_high_quality.jpg');
+loadServerImage('/img/004.png');
+// loadServerImage('/img/costco_high_quality.jpg');

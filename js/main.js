@@ -6,7 +6,7 @@ import {
   filterColor, addGrayScale,
   pixelate,
   productSmallPixelated,
-  scaleCanvasTiny
+  scaleCanvasTiny, sortPixels
 } from "../app/imageManipulation/controls.js";
 
 import * as reduceColorBit from "../app/imageManipulation/reduceColorBit.js";
@@ -98,7 +98,7 @@ function createControls() {
 
   createButton(productSmallPixelated);
 
-  const btnEl = createButton(blackAndWhite, [
+  createButton(blackAndWhite, [
     new RangeSliderType('red', 0, 255, 50),
     new RangeSliderType('green', 0, 255, 50),
     new RangeSliderType('blue', 0, 255, 50),
@@ -109,8 +109,9 @@ function createControls() {
   createButton(edgeDetection, [
     new LabelInputType('direction', 'string', 'Direction', 'right', 'right'),
     new RangeSliderType('edgeClampFactor', 1, 4, 4, .5),
-
   ]);
+
+  createButton(sortPixels);
 
 
   // setInterval(() => {

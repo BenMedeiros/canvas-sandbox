@@ -1,5 +1,6 @@
 import edgeDetector from "./edgeDetector.js";
 import grayscale from "./grayscale.js";
+import livePixelSorter from "./livePixelSorter.js";
 
 export function scaleCanvasTiny(scale) {
   console.log('scaleCanvasTiny', scale);
@@ -31,11 +32,11 @@ export function blackAndWhite(r, g, b) {
   const data = imageData.data;
 
   for (let i = 0; i < data.length; i += 4) {
-    if (r > data[i] && g > data[i+1] && b > data[i+2]) {
+    if (r > data[i] && g > data[i + 1] && b > data[i + 2]) {
       data[i] = 0;
       data[i + 1] = 0;
       data[i + 2] = 0;
-    }else{
+    } else {
       data[i] = 255;
       data[i + 1] = 255;
       data[i + 2] = 255;
@@ -109,16 +110,28 @@ export function bindCanvas(canvas_, canvasOutput_) {
 
 }
 
-export function edgeDetection(direction, edgeClampFactor){
+export function edgeDetection(direction, edgeClampFactor) {
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   edgeDetector(imageData, direction, edgeClampFactor);
   ctxOutput.putImageData(imageData, 0, 0);
 }
 
-export function addGrayScale(){
+export function addGrayScale() {
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   grayscale(imageData);
   ctxOutput.putImageData(imageData, 0, 0);
+}
+
+export function sortPixels() {
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  const callPixelSorter = () => {
+    if (livePixelSorter(imageData) > 0) {
+      setTimeout(callPixelSorter, 20);
+      ctxOutput.putImageData(imageData, 0, 0);
+    }
+  }
+  callPixelSorter();
 }
 
 
@@ -135,3 +148,56 @@ let ctxOutput = null;
 
 
 // loadImageToFit('/img/004.png');
+
+
+// https://lfiwccnp51.execute-api.us-west-2.amazonaws.com/default/lamda_test_template_restful?TableName=items
+
+
+async function postItems(items) {
+  try {
+    const response = await fetch(
+      // "https://lfiwccnp51.execute-api.us-west-2.amazonaws.com/default/lamda_test_template_restful?"
+      // + new URLSearchParams({TableName: 'items'}), {
+
+      "https://lfiwccnp51.execute-api.us-west-2.amazonaws.com/default/lamda_test_template_restful", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            "TableName": "items",
+            "Item": {
+              "id": "all_items",
+              "items": items
+            }
+          }
+        )
+      }
+    );
+
+    const result = await response.json();
+    console.log("Success:", result);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+const items = [
+  [2751, 'ACTIVE YEAST', 3.95],
+  [261105, 'KS PEPPER GR', 3.99],
+  [261104, 'KS MED SALT', 3.49],
+  [32911, 'KS VANILLA', 5.99],
+  [32911, 'KS VANILLA', 5.99],
+  [32911, 'KS VANILLA', 5.99],
+  [32911, 'KS VANILLA', 5.99],
+  [15306, 'MRM ANTIPSTO', 4.97]
+]
+
+
+postItems(items.map(el => {
+  return {
+    sku: el[0],
+    name: el[1],
+    price: el[2]
+  }
+})).then();
