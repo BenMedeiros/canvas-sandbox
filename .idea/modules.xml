@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/receipt-scanner.iml" filepath="$PROJECT_DIR$/.idea/receipt-scanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/canvas-sandbox.iml" filepath="$PROJECT_DIR$/.idea/canvas-sandbox.iml" />
     </modules>
   </component>
 </project>
